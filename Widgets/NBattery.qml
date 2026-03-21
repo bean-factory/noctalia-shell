@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.Commons
 import qs.Widgets
+import Quickshell.Services.UPower
 
 // Battery widget with Android 16 style rendering (horizontal or vertical)
 Item {
@@ -21,7 +22,8 @@ Item {
   // Styling - no hardcoded colors, only theme colors
   property color baseColor: Color.mOnSurface
   property color lowColor: Color.mError
-  property color chargingColor: Color.mPrimary
+  property color chargingColor: "#b2dba1"
+  property color saverColor: "#fdcc03"
   property color textColor: Color.mSurface
 
   // Display options
@@ -39,7 +41,7 @@ Item {
   // Internal sizing calculations based on baseSize
   readonly property real scaleFactor: baseSize / Style.fontSizeM
   readonly property real bodyWidth: {
-    const min = Style.toOdd(22 * scaleFactor);
+    const min = Style.toOdd(32 * scaleFactor);
     if (!showPercentageText) {
       return min;
     }
@@ -52,10 +54,10 @@ Item {
     return min;
   }
 
-  readonly property real bodyHeight: Style.toOdd(14 * scaleFactor)
-  readonly property real terminalWidth: Math.round(2.5 * scaleFactor)
+  readonly property real bodyHeight: Style.toOdd(15 * scaleFactor)
+  readonly property real terminalWidth: Math.round(0 * scaleFactor)
   readonly property real terminalHeight: Math.round(7 * scaleFactor)
-  readonly property real cornerRadius: Math.round(3 * scaleFactor)
+  readonly property real cornerRadius: Math.round(0 * scaleFactor)
 
   // Total size is just body + terminal (no external icon)
   readonly property real totalWidth: vertical ? bodyHeight : bodyWidth + terminalWidth
@@ -72,11 +74,15 @@ Item {
     if (low || critical) {
       return lowColor;
     }
+    if (PowerProfiles.profile == PowerProfile.PowerSaver){
+      return saverColor;
+    }
+
     return baseColor;
   }
 
   // Background color for empty portion (semi-transparent)
-  readonly property color emptyColor: Qt.alpha(baseColor, 0.66)
+  readonly property color emptyColor: Qt.alpha(baseColor, 0.6)
 
   // State icon logic
   readonly property string stateIcon: {
@@ -104,7 +110,7 @@ Item {
   Timer {
     id: alternateTimer
     interval: 4000
-    repeat: true
+    repeat: false
     running: root.charging && root.showPercentageText
     onTriggered: root.showStateIcon = !root.showStateIcon
   }
@@ -168,7 +174,7 @@ Item {
     font.weight: Style.fontWeightBold
     text: root.vertical ? String(Math.round(root.animatedPercentage)).split('').join('\n') : Math.round(root.animatedPercentage)
     pointSize: root.baseSize * (root.vertical ? 0.82 : 0.82)
-    color: Qt.alpha(root.textColor, 0.75)
+    color: Qt.alpha(root.textColor, 1)
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     lineHeight: root.vertical ? 0.7 : 1.0
@@ -191,8 +197,8 @@ Item {
     x: batteryBody.x + Style.pixelAlignCenter(bodyBackground.width, width)
     y: batteryBody.y + bodyBackground.y + Style.pixelAlignCenter(bodyBackground.height, height)
     icon: root.stateIcon
-    pointSize: Style.toOdd(root.baseSize)
-    color: Qt.alpha(root.textColor, 0.75)
+    pointSize: Style.toOdd(root.baseSize * 0.85)-1
+    color: Qt.alpha(root.textColor, 1)
 
     Behavior on opacity {
       enabled: !Settings.data.general.animationDisabled

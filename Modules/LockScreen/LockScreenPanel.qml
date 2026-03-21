@@ -196,7 +196,7 @@ Item {
         visible: batteryIndicator.isReady || keyboardLayout.currentLayout !== "Unknown" || LockKeysService.capsLockOn
 
         NIcon {
-          icon: "lock"
+          icon: "letter-c"
           pointSize: Style.fontSizeM
           color: LockKeysService.capsLockOn ? Color.mPrimary : Qt.alpha(Color.mOnSurfaceVariant, 0.5)
         }
@@ -271,7 +271,6 @@ Item {
               values: SpectrumService.values
               fillColor: Color.mPrimary
               opacity: 0.4
-              mirrored: Settings.data.audio.spectrumMirrored
             }
           }
 
@@ -285,7 +284,6 @@ Item {
               values: SpectrumService.values
               fillColor: Color.mPrimary
               opacity: 0.4
-              mirrored: Settings.data.audio.spectrumMirrored
             }
           }
 
@@ -299,7 +297,6 @@ Item {
               values: SpectrumService.values
               fillColor: Color.mPrimary
               opacity: 0.4
-              mirrored: Settings.data.audio.spectrumMirrored
             }
           }
 
@@ -661,7 +658,7 @@ Item {
             visible: batteryIndicator.isReady || keyboardLayout.currentLayout !== "Unknown" || LockKeysService.capsLockOn
 
             NIcon {
-              icon: "lock"
+              icon: "letter-c"
               pointSize: Style.fontSizeM
               color: LockKeysService.capsLockOn ? Color.mPrimary : Qt.alpha(Color.mOnSurfaceVariant, 0.5)
             }
@@ -721,7 +718,7 @@ Item {
             spacing: Style.marginL
 
             NIcon {
-              icon: "login-2"
+              icon: "lock"
               pointSize: Style.fontSizeL
               color: passwordInput.activeFocus ? Color.mPrimary : Color.mOnSurfaceVariant
               anchors.verticalCenter: parent.verticalCenter

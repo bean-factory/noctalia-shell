@@ -220,7 +220,8 @@ Item {
       // Horizontal layout for top/bottom bars
       RowLayout {
         id: rowLayout
-        anchors.verticalCenter: parent.verticalCenter
+        height: iconSize
+        y: Style.pixelAlignCenter(parent.height, height)
         spacing: Style.marginS
         visible: !isVerticalBar
         z: 1

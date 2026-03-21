@@ -54,7 +54,7 @@ Item {
   readonly property real maxTaskbarWidth: {
     if (!screen || isVerticalBar || !smartWidth || maxTaskbarWidthPercent <= 0)
       return 0;
-    var barFloating = Settings.data.bar.barType === "floating";
+    var barFloating = Settings.data.bar.floating || false;
     var barMarginH = barFloating ? Math.ceil(Settings.data.bar.marginHorizontal) : 0;
     var availableWidth = screen.width - (barMarginH * 2);
     return Math.round(availableWidth * (maxTaskbarWidthPercent / 100));
@@ -670,7 +670,7 @@ Item {
       columns: isVerticalBar ? 1 : -1 // -1 means unlimited
 
       rowSpacing: isVerticalBar ? Style.marginXXS : 0
-      columnSpacing: isVerticalBar ? 0 : Style.marginXXS
+      columnSpacing: isVerticalBar ? 0 : Style.marginS * 1.2
 
       Repeater {
         model: root.combinedModel
@@ -875,7 +875,7 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: Style.toOdd(root.itemSize * 0.25)
                     height: 4
-                    color: taskbarItem.isFocused ? Color.mPrimary : (taskbarItem.isHovered ? Color.mHover : "transparent")
+                    color: "transparent"
                     radius: Math.min(Style.radiusXXS, width / 2)
 
                     Behavior on color {

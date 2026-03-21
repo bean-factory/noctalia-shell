@@ -97,7 +97,7 @@ SmartPanel {
       "isShutdown": false
     },
     "hibernate": {
-      "icon": "hibernate",
+      "icon": "brand-windows",
       "title": I18n.tr("common.hibernate"),
       "isShutdown": false
     },

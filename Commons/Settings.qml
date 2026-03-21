@@ -192,6 +192,7 @@ Singleton {
       property bool useSeparateOpacity: false
 
       // Floating bar settings
+      property bool floating: false
       property int marginVertical: 4
       property int marginHorizontal: 4
 
@@ -686,7 +687,6 @@ Singleton {
       property bool volumeOverdrive: false
       property int spectrumFrameRate: 30
       property string visualizerType: "linear"
-      property bool spectrumMirrored: true
       property list<string> mprisBlacklist: []
       property string preferredPlayer: ""
       property bool volumeFeedback: false

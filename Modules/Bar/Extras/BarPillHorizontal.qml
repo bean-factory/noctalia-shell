@@ -55,7 +55,7 @@ Item {
   readonly property color iconFgColor: hovered ? Color.mOnHover : (customIconColor.a > 0) ? customIconColor : (customTextIconColor.a > 0) ? customTextIconColor : Color.mOnSurface
   readonly property color textFgColor: hovered ? Color.mOnHover : (customTextColor.a > 0) ? customTextColor : (customTextIconColor.a > 0) ? customTextIconColor : Color.mOnSurface
 
-  readonly property real iconSize: Style.toOdd(pillHeight * 0.48)
+  readonly property real iconSize: Style.toOdd(pillHeight * 0.49)
 
   // Content width calculation (for implicit sizing)
   readonly property real contentWidth: {

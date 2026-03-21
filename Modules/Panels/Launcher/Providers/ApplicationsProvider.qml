@@ -520,7 +520,7 @@ Item {
       "appId": getAppKey(app),
       "usageKey": getAppKey(app),
       "name": app.name || "Unknown",
-      "description": app.genericName || app.comment || "",
+      "description": "",
       "icon": app.icon || "application-x-executable",
       "isImage": false,
       "_score": (score !== undefined ? score : 0),

@@ -115,7 +115,7 @@ Singleton {
       break;
       default:
       case "default":
-      h = (Settings.data.bar.position === "left" || Settings.data.bar.position === "right") ? 33 : 31;
+      h = (Settings.data.bar.position === "left" || Settings.data.bar.position === "right") ? 33 : 28;
     }
     return toOdd(h);
   }
@@ -189,7 +189,7 @@ Singleton {
       break;
     default:
     case "default":
-      h = isVertical ? 33 : 31;
+      h = isVertical ? 33 : 28;
     }
     return toOdd(h);
   }

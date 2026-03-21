@@ -16,18 +16,6 @@ Singleton {
   property string schemesDirectory: Quickshell.shellDir + "/Assets/ColorScheme"
   property string downloadedSchemesDirectory: Settings.configDir + "colorschemes"
   property string colorsJsonFilePath: Settings.configDir + "colors.json"
-  readonly property string gtkRefreshScript: Quickshell.shellDir + "/Scripts/python/src/theming/gtk-refresh.py"
-
-  // force: when true, always push (e.g. user enabled "Sync system theme"). When false/omitted,
-  // skip if the GTK template is enabled so we do not race its post-hook on every darkMode flip.
-  function pushSystemColorScheme(force) {
-    if (!Settings.data.colorSchemes.syncGsettings)
-      return;
-    if (!force && TemplateProcessor.isTemplateEnabled("gtk"))
-      return;
-    const mode = Settings.data.colorSchemes.darkMode ? "dark" : "light";
-    Quickshell.execDetached(["python3", gtkRefreshScript, "--appearance-only", mode]);
-  }
 
   Connections {
     target: Settings.data.colorSchemes
@@ -37,7 +25,6 @@ Singleton {
         // Re-apply current scheme to pick the right variant
         applyScheme(Settings.data.colorSchemes.predefinedScheme);
       }
-      root.pushSystemColorScheme();
       // Toast: dark/light mode switched
       const enabled = !!Settings.data.colorSchemes.darkMode;
       const label = enabled ? I18n.tr("tooltips.switch-to-dark-mode") : I18n.tr("tooltips.switch-to-light-mode");

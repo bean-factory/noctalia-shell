@@ -90,6 +90,7 @@ ColumnLayout {
     defaultValue: Settings.getDefaultValue("bar.barType")
     onSelected: key => {
                   Settings.data.bar.barType = key;
+                  Settings.data.bar.floating = (key === "floating");
                 }
   }
 

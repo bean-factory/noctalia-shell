@@ -182,7 +182,6 @@ Item {
       showMinimumSignal: true
       vertical: root.isVerticalBar
       barPosition: root.barPosition
-      mirrored: Settings.data.audio.spectrumMirrored
     }
   }
 
@@ -194,7 +193,6 @@ Item {
       fillColor: root.fillColor
       showMinimumSignal: true
       vertical: root.isVerticalBar
-      mirrored: Settings.data.audio.spectrumMirrored
     }
   }
 
@@ -206,7 +204,6 @@ Item {
       fillColor: root.fillColor
       showMinimumSignal: true
       vertical: root.isVerticalBar
-      mirrored: Settings.data.audio.spectrumMirrored
     }
   }
 }

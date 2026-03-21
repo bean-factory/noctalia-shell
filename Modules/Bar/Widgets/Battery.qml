@@ -67,7 +67,6 @@ Item {
     const isInternal = selectedDevice.isLaptopBattery;
     if (isInternal) {
       // Show charge percentage
-      rows.push([I18n.tr("battery.battery-level"), `${percent}%`]);
 
       let timeText = BatteryService.getTimeRemainingText(selectedDevice);
       if (timeText) {
@@ -92,7 +91,6 @@ Item {
       // Show battery health if supported (check actual battery, not DisplayDevice)
       let healthDevice = selectedDevice.healthSupported ? selectedDevice : (BatteryService.laptopBatteries.length > 0 ? BatteryService.laptopBatteries[0] : null);
       if (healthDevice && healthDevice.healthSupported) {
-        rows.push([I18n.tr("battery.battery-health"), `${Math.round(healthDevice.healthPercentage)}%`]);
       }
     } else if (selectedDevice) {
       // External / Peripheral Device (Phone, Keyboard, Mouse, Gamepad, Headphone etc.)
@@ -182,8 +180,6 @@ Item {
     pluggedIn: root.isPluggedIn
     low: root.isLowBattery
     critical: root.isCriticalBattery
-    baseColor: graphicMouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
-    textColor: graphicMouseArea.containsMouse ? Color.mHover : Color.mSurface
   }
 
   MouseArea {

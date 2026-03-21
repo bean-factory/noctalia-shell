@@ -689,8 +689,7 @@ Rectangle {
       Layout.leftMargin: Style.marginL
       Layout.rightMargin: Style.marginL
       margins: 0
-      border.color: Style.boxBorderColor
-      border.width: Style.borderS
+      color: Color.mSurface
 
       property int computedCurrentIndex: visible && root.providerCategories.length > 0 ? root.providerCategories.indexOf(root.currentProvider.selectedCategory) : 0
       currentIndex: computedCurrentIndex

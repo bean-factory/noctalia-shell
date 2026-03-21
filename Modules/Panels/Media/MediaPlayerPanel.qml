@@ -546,7 +546,6 @@ SmartPanel {
       fillColor: Color.mPrimary
       opacity: 0.4
       barPosition: Settings.getBarPositionForScreen(root.screen?.name)
-      mirrored: Settings.data.audio.spectrumMirrored
     }
   }
 
@@ -558,7 +557,6 @@ SmartPanel {
       values: SpectrumService.values
       fillColor: Color.mPrimary
       opacity: 0.4
-      mirrored: Settings.data.audio.spectrumMirrored
     }
   }
 
@@ -570,7 +568,6 @@ SmartPanel {
       values: SpectrumService.values
       fillColor: Color.mPrimary
       opacity: 0.4
-      mirrored: Settings.data.audio.spectrumMirrored
     }
   }
 }

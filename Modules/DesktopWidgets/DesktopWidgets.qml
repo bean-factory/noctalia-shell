@@ -57,20 +57,6 @@ Variants {
       id: window
       color: "transparent"
       screen: screenLoader.modelData
-      mask: DesktopWidgetRegistry.editMode ? null : widgetsMask
-
-      // Dynamic mask: combine clickable regions for each loaded widget
-      property var _maskRegions: []
-
-      Component {
-        id: maskRegionComponent
-        Region {}
-      }
-
-      Region {
-        id: widgetsMask
-        regions: window._maskRegions
-      }
 
       WlrLayershell.layer: WlrLayer.Bottom
       WlrLayershell.exclusionMode: ExclusionMode.Ignore
@@ -341,7 +327,7 @@ Variants {
           visible: DesktopWidgetRegistry.editMode && Settings.data.desktopWidgets.enabled
 
           readonly property string barPos: Settings.getBarPositionForScreen(window.screen?.name)
-          readonly property bool barFloating: Settings.data.bar.barType === "floating"
+          readonly property bool barFloating: Settings.data.bar.floating || false
           readonly property real barHeight: Style.getBarHeightForScreen(window.screen?.name)
 
           readonly property int barOffsetTop: {

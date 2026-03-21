@@ -447,7 +447,7 @@ Item {
           anchors.horizontalCenter: trayIcon.horizontalCenter
           width: Style.toOdd(iconSize * 0.25)
           height: 4
-          color: trayDelegate.isHovered ? Color.mHover : "transparent"
+          color: trayDelegate.isHovered ? "transparent" : "transparent"
           radius: Math.min(Style.radiusXXS, width / 2)
 
           Behavior on color {

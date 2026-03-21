@@ -316,8 +316,7 @@ Singleton {
       "id": "emacs",
       "name": "Emacs",
       "category": "editor",
-      "input": "emacs.el",
-      "postProcess": () => `emacsclient -e "(load-theme 'noctalia t)"`
+      "input": "emacs.el"
     },
     {
       "id": "labwc",

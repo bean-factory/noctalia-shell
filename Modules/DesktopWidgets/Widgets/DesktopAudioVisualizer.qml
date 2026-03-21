@@ -91,7 +91,6 @@ DraggableDesktopWidget {
       values: SpectrumService.values
       fillColor: root.fillColor
       showMinimumSignal: true
-      mirrored: Settings.data.audio.spectrumMirrored
     }
   }
 
@@ -102,7 +101,6 @@ DraggableDesktopWidget {
       values: SpectrumService.values
       fillColor: root.fillColor
       showMinimumSignal: true
-      mirrored: Settings.data.audio.spectrumMirrored
     }
   }
 
@@ -113,7 +111,6 @@ DraggableDesktopWidget {
       values: SpectrumService.values
       fillColor: root.fillColor
       showMinimumSignal: true
-      mirrored: Settings.data.audio.spectrumMirrored
     }
   }
 }

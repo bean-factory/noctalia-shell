@@ -281,10 +281,6 @@ Singleton {
                                                                                                       lines.push(`input_path = "${Quickshell.shellDir}/Assets/Templates/${app.input}"`);
                                                                                                       const expandedPath = client.path.replace("~", homeDir) + "/themes/noctalia-theme.el";
                                                                                                       lines.push(`output_path = "${expandedPath}"`);
-                                                                                                      if (app.postProcess) {
-                                                                                                        const postHook = escapeTomlString(app.postProcess(mode));
-                                                                                                        lines.push(`post_hook = "${postHook}"`);
-                                                                                                      }
                                                                                                     });
                                               }
                                             } else {

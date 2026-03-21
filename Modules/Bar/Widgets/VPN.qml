@@ -126,7 +126,7 @@ Item {
     autoHide: false
     forceOpen: !isBarVertical && root.displayMode === "alwaysShow"
     forceClose: isBarVertical || root.displayMode === "alwaysHide" || !pill.text
-    onRightClicked: {
+    onClicked: {
       PanelService.showContextMenu(contextMenu, pill, screen);
     }
     tooltipText: {

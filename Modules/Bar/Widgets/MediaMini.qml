@@ -307,7 +307,7 @@ Item {
             visible: showAlbumArt && hasPlayer
             anchors.fill: parent
             anchors.margins: showProgressRing ? root.progressWidth * 2 : 0
-            radius: width / 2
+            radius: Style.radiusM * 2
             imagePath: MediaService.trackArtUrl
             borderWidth: 0
             imageFillMode: Image.PreserveAspectCrop
@@ -366,7 +366,7 @@ Item {
           visible: showAlbumArt && hasPlayer
           anchors.fill: parent
           anchors.margins: showProgressRing ? root.progressWidth * 2 : 0
-          radius: width / 2
+          radius: Style.radiusM * 2
           imagePath: MediaService.trackArtUrl
           borderWidth: 0
           imageFillMode: Image.PreserveAspectCrop
@@ -425,7 +425,6 @@ Item {
       fillColor: Color.mPrimary
       opacity: 0.4
       barPosition: root.barPosition
-      mirrored: Settings.data.audio.spectrumMirrored
     }
   }
 
@@ -437,7 +436,6 @@ Item {
       values: SpectrumService.values
       fillColor: Color.mPrimary
       opacity: 0.4
-      mirrored: Settings.data.audio.spectrumMirrored
     }
   }
 
@@ -449,7 +447,6 @@ Item {
       values: SpectrumService.values
       fillColor: Color.mPrimary
       opacity: 0.4
-      mirrored: Settings.data.audio.spectrumMirrored
     }
   }
 

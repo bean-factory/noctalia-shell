@@ -96,7 +96,7 @@ Variants {
       readonly property bool isCentered: location === "top" || location === "bottom"
 
       readonly property string barPos: Settings.getBarPositionForScreen(notifWindow.screen?.name)
-      readonly property bool isFloating: Settings.data.bar.barType === "floating"
+      readonly property bool isFloating: Settings.data.bar.floating
       readonly property real barHeight: Style.getBarHeightForScreen(notifWindow.screen?.name)
 
       readonly property bool isFramed: Settings.data.bar.barType === "framed"
@@ -143,9 +143,9 @@ Variants {
 
       // Margins for PanelWindow - only apply bar offset for the specific edge where the bar is
       margins.top: isTop ? barOffsetTop - shadowPadding + Style.marginM : 0
-      margins.bottom: isBottom ? barOffsetBottom - shadowPadding : 0
+      margins.bottom: isBottom ? barOffsetBottom + 8 - shadowPadding : 0
       margins.left: isLeft ? barOffsetLeft - shadowPadding + Style.marginM : 0
-      margins.right: isRight ? barOffsetRight - shadowPadding + Style.marginM : 0
+      margins.right: isRight ? barOffsetRight + 10 - shadowPadding + Style.marginM : 0
 
       implicitWidth: notifWidth + shadowPadding * 2
       implicitHeight: notificationStack.implicitHeight + Style.marginL
@@ -620,7 +620,7 @@ Variants {
                     Layout.preferredWidth: Math.round(40 * Style.uiScaleRatio)
                     Layout.preferredHeight: Math.round(40 * Style.uiScaleRatio)
                     Layout.alignment: Qt.AlignVCenter
-                    radius: Math.min(Style.radiusL, Layout.preferredWidth / 2)
+                    radius: Math.min(Style.radiusXS, Layout.preferredWidth / 2)
                     imagePath: model.originalImage || ""
                     borderColor: "transparent"
                     borderWidth: 0

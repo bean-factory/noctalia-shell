@@ -67,7 +67,7 @@ Item {
   // Bar positioning properties (per-screen)
   readonly property string barPosition: Settings.getBarPositionForScreen(screen?.name)
   readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
-  readonly property bool barFloating: Settings.data.bar.barType === "floating"
+  readonly property bool barFloating: Settings.data.bar.floating || false
 
   // Bar density (per-screen)
   readonly property string barDensity: Settings.getBarDensityForScreen(screen?.name)
@@ -305,11 +305,11 @@ Item {
             var localPos = mapToItem(widget, xPos, yPos);
 
             if (root.barIsVertical) {
-              if (localPos.y >= -Style.marginS && localPos.y <= widget.height + Style.marginS) {
+              if (localPos.y >= -Style.marginS * 0.8 && localPos.y <= widget.height + Style.marginS * 0.8) {
                 return true;
               }
             } else {
-              if (localPos.x >= -Style.marginS && localPos.x <= widget.width + Style.marginS) {
+              if (localPos.x >= -Style.marginS * 0.8 && localPos.x <= widget.width + Style.marginS * 0.8) {
                 return true;
               }
             }
@@ -515,7 +515,7 @@ Item {
       // Top edge hot corner - triggers first widget in left (top) section
       MouseArea {
         width: parent.width
-        height: Style.marginS
+        height: Style.marginS * 0.8
         x: 0
         y: 0
         onClicked: root.triggerFirstWidgetInSection("left")
@@ -524,7 +524,7 @@ Item {
       // Bottom edge hot corner - triggers last widget in right (bottom) section
       MouseArea {
         width: parent.width
-        height: Style.marginS
+        height: Style.marginS * 0.8
         x: 0
         anchors.bottom: parent.bottom
         onClicked: root.triggerLastWidgetInSection("right")
@@ -621,7 +621,7 @@ Item {
 
       // Left edge hot corner - triggers first widget in left section
       MouseArea {
-        width: Style.marginS
+        width: Style.marginS * 0.8
         height: parent.height
         x: 0
         y: 0
@@ -630,7 +630,7 @@ Item {
 
       // Right edge hot corner - triggers last widget in right section
       MouseArea {
-        width: Style.marginS
+        width: Style.marginS * 0.8
         height: parent.height
         anchors.right: parent.right
         y: 0

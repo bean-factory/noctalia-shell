@@ -770,7 +770,7 @@ Item {
 
         x: Style.pixelAlignCenter(parent.width, width)
         y: Style.pixelAlignCenter(parent.height, height)
-        spacing: 2
+        spacing : Style.marginS * 1.2
         flow: root.isVertical ? Flow.TopToBottom : Flow.LeftToRight
 
         Repeater {
@@ -807,8 +807,8 @@ Item {
                 anchors.bottomMargin: -2
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: Style.toOdd(root.iconSize * 0.25)
-                height: 4
+                width: Style.toOdd(root.iconSize * 0.5)
+                height: 0
                 color: modelData.isFocused ? Color.mPrimary : Color.mHover
                 radius: Math.min(Style.radiusXXS, width / 2)
               }
@@ -862,30 +862,32 @@ Item {
           left: parent.left
           top: parent.top
           leftMargin: -Style.fontSizeXS * 0.55
-          topMargin: -Style.fontSizeXS * 0.25
+          topMargin: -Style.fontSizeXS * 0.15
         }
 
-        width: Math.max(groupedWorkspaceNumber.implicitWidth + Style.margin2XS, Style.fontSizeXXS * 2)
-        height: Math.max(groupedWorkspaceNumber.implicitHeight + Style.marginXS, Style.fontSizeXXS * 2)
+        width: Math.min(groupedWorkspaceNumber.implicitWidth + Style.margin2XS, Style.fontSizeXXS * 1.5)
+        height: Math.min(groupedWorkspaceNumber.implicitHeight + Style.marginXS, Style.fontSizeXXS * 1.5)
 
         Rectangle {
           id: groupedWorkspaceNumberBackground
 
           anchors.fill: parent
           radius: Math.min(Style.radiusL, width / 2)
-
+          border.color: { 
+            if (groupedContainer.workspaceModel.isFocused)
+              return "transparent";
+            return Color.mOutline 
+            }
           color: {
             if (groupedContainer.workspaceModel.isFocused)
               return Color.resolveColorKey(root.focusedColor);
             if (groupedContainer.workspaceModel.isUrgent)
               return Color.mError;
             if (groupedContainer.hasWindows)
-              return Color.resolveColorKey(root.occupiedColor);
-
-            return Color.resolveColorKey(root.emptyColor);
+              return Color.mSurface
+            return Color.mSurface
           }
 
-          scale: groupedContainer.workspaceModel.isActive ? 1.0 : 0.8
 
           Behavior on scale {
             NumberAnimation {
@@ -909,9 +911,9 @@ Item {
           anchors.centerIn: groupedWorkspaceNumberContainer
           width: groupedWorkspaceNumberContainer.width + 12 * root.masterProgress
           height: groupedWorkspaceNumberContainer.height + 12 * root.masterProgress
-          radius: width / 2
+          radius: Style.radiusM * 2
           color: "transparent"
-          border.color: root.effectColor
+          border.color: "transparent"
           border.width: Math.max(1, Math.round((2 + 4 * (1.0 - root.masterProgress))))
           opacity: root.effectsActive && groupedContainer.workspaceModel.isFocused ? (1.0 - root.masterProgress) * 0.7 : 0
           visible: root.effectsActive && groupedContainer.workspaceModel.isFocused
@@ -922,6 +924,7 @@ Item {
           id: groupedWorkspaceNumber
 
           anchors.centerIn: parent
+          anchors.verticalCenterOffset: 1
 
           text: {
             if (groupedContainer.workspaceModel.name && groupedContainer.workspaceModel.name.length > 0) {
@@ -937,7 +940,7 @@ Item {
 
           family: Settings.data.ui.fontFixed
           font {
-            pointSize: barFontSize * 0.75
+            pointSize: barFontSize * 0.8
             weight: fontWeight
             capitalization: Font.AllUppercase
           }
@@ -949,11 +952,17 @@ Item {
             if (groupedContainer.workspaceModel.isUrgent)
               return Color.mOnError;
             if (groupedContainer.hasWindows)
-              return Color.resolveOnColorKey(root.occupiedColor);
-
-            return Color.resolveOnColorKey(root.emptyColor);
+              return Color.mOnSurface
+            return Color.mOnSurface
           }
 
+          Behavior on color {
+            enabled: !Color.isTransitioning
+            ColorAnimation {
+              duration: Style.animationFast
+              easing.type: Easing.InOutCubic
+            }
+          }
           Behavior on opacity {
             NumberAnimation {
               duration: Style.animationFast
