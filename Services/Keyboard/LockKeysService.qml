@@ -28,6 +28,7 @@ Singleton {
   property bool capsLockOn: false
   property bool numLockOn: false
   property bool scrollLockOn: false
+  property bool initialCheckDone: false
 
   signal capsLockChanged(bool active)
   signal numLockChanged(bool active)
