@@ -64,7 +64,7 @@ Item {
     anchors.centerIn: parent
 
     radius: Style.radiusL
-    color: Style.capsuleColor
+    color: clockMouseArea.containsMouse ? Color.mHover : Style.capsuleColor
     border.color: Style.capsuleBorderColor
     border.width: Style.capsuleBorderWidth
 
@@ -102,7 +102,7 @@ Item {
                 }
               }
               applyUiScale: false
-              color: textColor
+              color: clockMouseArea.containsMouse ? Color.mSurfaceVariant : textColor
               wrapMode: Text.WordWrap
               Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
               features: ({

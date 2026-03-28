@@ -30,14 +30,6 @@ Item {
   property bool showPercentageText: true
   property bool vertical: false
 
-  // Alternating state icon display (toggles between percentage and icon when charging)
-  property bool showStateIcon: false
-
-  onChargingChanged: {
-    if (!charging)
-      showStateIcon = false;
-  }
-
   // Internal sizing calculations based on baseSize
   readonly property real scaleFactor: baseSize / Style.fontSizeM
   readonly property real bodyWidth: {
@@ -49,12 +41,12 @@ Item {
     // increase length when showing 100%
     if (percentage > 99) {
       const max = Style.toOdd(30 * scaleFactor);
-      return max;
+      return max + 6;
     }
-    return min;
+    return min + 6;
   }
 
-  readonly property real bodyHeight: Style.toOdd(15 * scaleFactor)
+  readonly property real bodyHeight: Style.toOdd(18 * scaleFactor)
   readonly property real terminalWidth: Math.round(0 * scaleFactor)
   readonly property real terminalHeight: Math.round(7 * scaleFactor)
   readonly property real cornerRadius: Math.round(0 * scaleFactor)
@@ -74,9 +66,6 @@ Item {
     if (low || critical) {
       return lowColor;
     }
-    if (PowerProfiles.profile == PowerProfile.PowerSaver){
-      return saverColor;
-    }
 
     return baseColor;
   }
@@ -84,7 +73,7 @@ Item {
   // Background color for empty portion (semi-transparent)
   readonly property color emptyColor: Qt.alpha(baseColor, 0.6)
 
-  // State icon logic
+  // State icon logic — binding on PowerProfiles.profile ensures leaf reacts to profile changes
   readonly property string stateIcon: {
     if (!ready)
       return "x";
@@ -92,7 +81,19 @@ Item {
       return "bolt-filled";
     if (pluggedIn)
       return "plug-filled";
+    if (PowerProfiles.profile == PowerProfile.PowerSaver)
+      return "seedling-filled";
+    if (PowerProfiles.profile == PowerProfile.Performance)
+      return "performance";
     return "";
+  }
+  property string renderedStateIcon: stateIcon
+  property real stateIconVisibility: stateIcon !== "" ? 1 : 0
+
+  onStateIconChanged: {
+    if (stateIcon !== "") {
+      renderedStateIcon = stateIcon;
+    }
   }
 
   // Animated percentage for smooth transitions
@@ -106,13 +107,12 @@ Item {
     }
   }
 
-  // Timer to alternate between percentage text and state icon when charging/plugged
-  Timer {
-    id: alternateTimer
-    interval: 4000
-    repeat: false
-    running: root.charging && root.showPercentageText
-    onTriggered: root.showStateIcon = !root.showStateIcon
+  Behavior on stateIconVisibility {
+    enabled: !Settings.data.general.animationDisabled
+    NumberAnimation {
+      duration: Style.animationFast
+      easing.type: Easing.InOutQuad
+    }
   }
 
   implicitWidth: Math.round(totalWidth)
@@ -156,29 +156,22 @@ Item {
       visible: root.ready && (root.animatedPercentage > 0 || root.critical)
       x: 0
       y: root.vertical ? root.terminalWidth + root.bodyWidth * (1 - (root.critical ? 1 : root.animatedPercentage / 100)) : 0
-      width: root.vertical ? root.bodyHeight : root.bodyWidth * (root.critical ? 1 : root.animatedPercentage / 100)
+      width: root.vertical ? root.bodyHeight : root.bodyWidth * (root.critical ? 1 : Math.min(root.animatedPercentage/90,1))
       height: root.vertical ? root.bodyWidth * (root.critical ? 1 : root.animatedPercentage / 100) : root.bodyHeight
       radius: root.cornerRadius
       color: root.activeColor
     }
   }
 
-  // Percentage text overlaid on battery center
-  NText {
-    id: percentageText
-    visible: opacity > 0
-    opacity: root.showPercentageText && root.ready && (root.charging ? !root.showStateIcon : !root.pluggedIn) ? 1 : 0
-    x: batteryBody.x + Style.pixelAlignCenter(bodyBackground.width, width)
-    y: batteryBody.y + bodyBackground.y + Style.pixelAlignCenter(bodyBackground.height, height)
-    font.family: Settings.data.ui.fontFixed
-    font.weight: Style.fontWeightBold
-    text: root.vertical ? String(Math.round(root.animatedPercentage)).split('').join('\n') : Math.round(root.animatedPercentage)
-    pointSize: root.baseSize * (root.vertical ? 0.82 : 0.82)
-    color: Qt.alpha(root.textColor, 1)
-    horizontalAlignment: Text.AlignHCenter
-    verticalAlignment: Text.AlignVCenter
-    lineHeight: root.vertical ? 0.7 : 1.0
-    lineHeightMode: Text.ProportionalHeight
+  // Icon + percentage text shown side by side, centered in the battery body.
+  // Icon is hidden when empty (no stateIcon) so text stays centered alone.
+  Row {
+    id: contentRow
+    spacing: 0
+    readonly property real iconGap: 3
+    // Centre the row within the visible body rectangle
+    x: batteryBody.x + bodyBackground.x + (bodyBackground.width  - width)  / 2
+    y: batteryBody.y + bodyBackground.y + (bodyBackground.height - height) / 2
 
     Behavior on opacity {
       enabled: !Settings.data.general.animationDisabled
@@ -187,25 +180,42 @@ Item {
         easing.type: Easing.InOutQuad
       }
     }
-  }
 
-  // State icon centered inside battery body (shown when alternating)
-  NIcon {
-    id: stateIconOverlay
-    visible: opacity > 0
-    opacity: !root.ready || (root.charging ? (root.showStateIcon || !root.showPercentageText) : root.pluggedIn) ? 1 : 0
-    x: batteryBody.x + Style.pixelAlignCenter(bodyBackground.width, width)
-    y: batteryBody.y + bodyBackground.y + Style.pixelAlignCenter(bodyBackground.height, height)
-    icon: root.stateIcon
-    pointSize: Style.toOdd(root.baseSize * 0.85)-1
-    color: Qt.alpha(root.textColor, 1)
+    // State icon slot keeps layout stable while icon slides in/out.
+    Item {
+      id: stateIconSlot
+      width: (stateIconItem.implicitWidth + contentRow.iconGap) * root.stateIconVisibility
+      height: Math.max(stateIconItem.implicitHeight, percentageText.implicitHeight)
+      clip: true
 
-    Behavior on opacity {
-      enabled: !Settings.data.general.animationDisabled
-      NumberAnimation {
-        duration: Style.animationFast
-        easing.type: Easing.InOutQuad
+      NIcon {
+        id: stateIconItem
+        visible: opacity > 0
+        opacity: root.stateIconVisibility
+        icon: root.renderedStateIcon
+        pointSize: Style.toOdd(root.baseSize * 0.85) - 1
+        color: Qt.alpha(root.textColor, 1)
+        anchors.verticalCenter: parent.verticalCenter
+        x: (root.stateIconVisibility - 1) * implicitWidth
       }
+    }
+
+    // Percentage text
+    NText {
+      id: percentageText
+      visible: root.showPercentageText && root.ready
+      font.family: Settings.data.ui.fontFixed
+      font.weight: Style.fontWeightBold
+      text: root.vertical
+        ? String(Math.round(root.animatedPercentage)).split('').join('\n')
+        : Math.round(root.animatedPercentage)
+      pointSize: root.baseSize * 0.82
+      color: Qt.alpha(root.textColor, 1)
+      horizontalAlignment: Text.AlignHCenter
+      verticalAlignment: Text.AlignVCenter
+      lineHeight: root.vertical ? 0.7 : 1.0
+      lineHeightMode: Text.ProportionalHeight
+      anchors.verticalCenter: parent.verticalCenter
     }
   }
 }

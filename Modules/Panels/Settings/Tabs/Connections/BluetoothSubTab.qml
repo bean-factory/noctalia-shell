@@ -196,6 +196,8 @@ Item {
       id: connectedDevicesBox
       visible: root.connectedDevices.length > 0 && BluetoothService.enabled
       Layout.fillWidth: true
+      Layout.leftMargin: showOnlyLists ? Style.marginXS : 0
+      Layout.rightMargin: showOnlyLists ? Style.marginXS : 0
       Layout.preferredHeight: connectedDevicesCol.implicitHeight + Style.margin2M
       border.color: showOnlyLists ? Style.boxBorderColor : "transparent"
       color: showOnlyLists ? Color.mSurfaceVariant : "transparent"
@@ -227,6 +229,8 @@ Item {
       id: pairedDevicesBox
       visible: root.pairedDevices.length > 0 && BluetoothService.enabled
       Layout.fillWidth: true
+      Layout.leftMargin: showOnlyLists ? Style.marginXS : 0
+      Layout.rightMargin: showOnlyLists ? Style.marginXS : 0
       Layout.preferredHeight: pairedDevicesCol.implicitHeight + Style.margin2M
       border.color: showOnlyLists ? Style.boxBorderColor : "transparent"
       color: showOnlyLists ? Color.mSurfaceVariant : "transparent"
@@ -390,9 +394,11 @@ Item {
       }
 
       Layout.fillWidth: true
+      Layout.leftMargin: root.showOnlyLists ? Style.marginXS : 0
+      Layout.rightMargin: root.showOnlyLists ? Style.marginXS : 0
       Layout.preferredHeight: deviceColumn.implicitHeight + (Style.marginXL)
       radius: Style.radiusM
-      clip: true
+      clip: !root.showOnlyLists
       forceOpaque: true
       color: device.getContentColors()[0]
 
@@ -784,3 +790,4 @@ Item {
     }
   }
 }
+

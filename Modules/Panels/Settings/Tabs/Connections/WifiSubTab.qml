@@ -181,6 +181,8 @@ Item {
       id: connectedBox
       visible: root.connectedNetworks.length > 0 && NetworkService.wifiEnabled
       Layout.fillWidth: true
+      Layout.leftMargin: showOnlyLists ? Style.marginXS : 0
+      Layout.rightMargin: showOnlyLists ? Style.marginXS : 0
       Layout.preferredHeight: connectedCol.implicitHeight + Style.margin2M
       border.color: showOnlyLists ? Style.boxBorderColor : "transparent"
       color: showOnlyLists ? Color.mSurfaceVariant : "transparent"
@@ -212,6 +214,8 @@ Item {
       id: savedBox
       visible: root.savedNetworks.length > 0 && NetworkService.wifiEnabled
       Layout.fillWidth: true
+      Layout.leftMargin: showOnlyLists ? Style.marginXS : 0
+      Layout.rightMargin: showOnlyLists ? Style.marginXS : 0
       Layout.preferredHeight: savedCol.implicitHeight + Style.margin2M
       border.color: showOnlyLists ? Style.boxBorderColor : "transparent"
       color: showOnlyLists ? Color.mSurfaceVariant : "transparent"
@@ -243,6 +247,8 @@ Item {
       id: availableBox
       visible: root.availableNetworks.length > 0 && NetworkService.wifiEnabled
       Layout.fillWidth: true
+      Layout.leftMargin: showOnlyLists ? Style.marginXS : 0
+      Layout.rightMargin: showOnlyLists ? Style.marginXS : 0
       Layout.preferredHeight: availableCol.implicitHeight + Style.margin2M
       border.color: showOnlyLists ? Style.boxBorderColor : "transparent"
       color: showOnlyLists ? Color.mSurfaceVariant : "transparent"
@@ -655,9 +661,11 @@ Item {
       }
 
       Layout.fillWidth: true
+      Layout.leftMargin: root.showOnlyLists ? Style.marginXS : 0
+      Layout.rightMargin: root.showOnlyLists ? Style.marginXS : 0
       Layout.preferredHeight: deviceColumn.implicitHeight + (Style.marginXL)
       radius: Style.radiusM
-      clip: true
+      clip: !root.showOnlyLists
       forceOpaque: true
       color: networkItem.getContentColors()[0]
 
@@ -1459,3 +1467,4 @@ Item {
                 }
   }
 }
+

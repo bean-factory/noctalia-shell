@@ -103,7 +103,6 @@ Item {
       var external = BatteryService.bluetoothBatteries;
       if (external.length > 0) {
         if (rows.length > 0) {
-          rows.push(["---", "---"]); // Separator
         }
         for (var j = 0; j < external.length; j++) {
           var dev = external[j];

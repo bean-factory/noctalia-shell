@@ -237,7 +237,7 @@ Item {
     width: Style.toOdd(isVertical ? (isHidden ? 0 : verticalSize) : (isHidden ? 0 : contentWidth))
     height: Style.toOdd(isVertical ? (isHidden ? 0 : verticalSize) : capsuleHeight)
     radius: Style.radiusM
-    color: Style.capsuleColor
+    color: mainMouseArea.containsMouse ? Color.mHover : Style.capsuleColor
     border.color: Style.capsuleBorderColor
     border.width: Style.capsuleBorderWidth
 
@@ -338,7 +338,7 @@ Item {
           cornerRadius: Style.radiusM
 
           NText {
-            color: hasPlayer ? root.textColor : Color.mOnSurfaceVariant
+            color: mainMouseArea.containsMouse ? Color.mSurfaceVariant : root.textColor
             pointSize: barFontSize
             elide: Text.ElideNone
           }
