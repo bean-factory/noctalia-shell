@@ -245,6 +245,12 @@ Item {
     return appId.toLowerCase().trim();
   }
 
+  function normalizeOutputName(outputName) {
+    if (!outputName || typeof outputName !== "string")
+      return "";
+    return outputName.toLowerCase().trim();
+  }
+
   // Helper function to check if an app is pinned
   function isAppPinned(appId) {
     if (!appId)
@@ -326,26 +332,36 @@ Item {
 
   function refreshWorkspaces() {
     var targetList = [];
+    var seenWorkspaceKeys = ({});
     var focusedOutput = null;
     if (followFocusedScreen) {
       for (var i = 0; i < CompositorService.workspaces.count; i++) {
         const ws = CompositorService.workspaces.get(i);
         if (ws.isFocused)
-          focusedOutput = ws.output.toLowerCase();
+          focusedOutput = normalizeOutputName(ws.output);
       }
     }
 
     if (screen !== null) {
-      const screenName = screen.name.toLowerCase();
+      const screenName = normalizeOutputName(screen.name);
       for (var i = 0; i < CompositorService.workspaces.count; i++) {
         const ws = CompositorService.workspaces.get(i);
+        const wsOutput = normalizeOutputName(ws.output);
         // For global workspaces (e.g., LabWC), show all workspaces on all screens
-        const matchesScreen = CompositorService.globalWorkspaces || (followFocusedScreen && ws.output.toLowerCase() == focusedOutput) || (!followFocusedScreen && ws.output.toLowerCase() == screenName);
+        const matchesScreen = CompositorService.globalWorkspaces || (followFocusedScreen && wsOutput === focusedOutput) || (!followFocusedScreen && wsOutput === screenName);
 
         if (!matchesScreen)
           continue;
         if (hideUnoccupied && !ws.isOccupied && !ws.isFocused)
           continue;
+
+        // Defend against transient backend duplicates during output hotplug/update.
+        // We keep one entry per logical workspace key so pills cannot multiply.
+        const workspaceKey = wsOutput + "|" + String(ws.idx);
+        if (seenWorkspaceKeys[workspaceKey]) {
+          continue;
+        }
+        seenWorkspaceKeys[workspaceKey] = true;
 
         // Create a plain JS object for the workspace data
         var workspaceData = {
@@ -770,7 +786,7 @@ Item {
 
         x: Style.pixelAlignCenter(parent.width, width)
         y: Style.pixelAlignCenter(parent.height, height)
-        spacing : Style.marginS * 1.2
+        spacing: Style.marginS * 1.2
         flow: root.isVertical ? Flow.TopToBottom : Flow.LeftToRight
 
         Repeater {
@@ -873,21 +889,20 @@ Item {
 
           anchors.fill: parent
           radius: Math.min(Style.radiusL, width / 2)
-          border.color: { 
+          border.color: {
             if (groupedContainer.workspaceModel.isFocused)
               return "transparent";
-            return Color.mOutline 
-            }
+            return Color.mOutline;
+          }
           color: {
             if (groupedContainer.workspaceModel.isFocused)
               return Color.resolveColorKey(root.focusedColor);
             if (groupedContainer.workspaceModel.isUrgent)
               return Color.mError;
             if (groupedContainer.hasWindows)
-              return Color.mSurface
-            return Color.mSurface
+              return Color.mSurface;
+            return Color.mSurface;
           }
-
 
           Behavior on scale {
             NumberAnimation {
@@ -952,8 +967,8 @@ Item {
             if (groupedContainer.workspaceModel.isUrgent)
               return Color.mOnError;
             if (groupedContainer.hasWindows)
-              return Color.mOnSurface
-            return Color.mOnSurface
+              return Color.mOnSurface;
+            return Color.mOnSurface;
           }
 
           Behavior on color {
